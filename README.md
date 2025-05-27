@@ -12,6 +12,9 @@ options:
   -h, --help            show this help message and exit
   -ld LISTDOMAIN, --listdomain LISTDOMAIN
                         File containing the list of domains
+  -r, --rank            Check domain rank using Tranco list
+  -s, --score           Filter domains by rank score
+  -o, --output          Save output to a file
 ```
 ### Installation
 ```
