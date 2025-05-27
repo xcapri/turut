@@ -12,6 +12,9 @@ options:
   -h, --help            show this help message and exit
   -ld LISTDOMAIN, --listdomain LISTDOMAIN
                         File containing the list of domains
+  -r, --rank            Check domain rank using Tranco list
+  -s, --score           Filter domains by rank score
+  -o, --output          Save output to a file
 ```
 ### Installation
 ```
@@ -43,4 +46,8 @@ turut -ld test
 redacted.com
 redacted.com
 
+or 
+turut -r -s high,medium
+https://amazonaws.com | 6 | 2025-05-27 | High (Very Popular)
+https://amagi.tv | 1234 | 2025-05-27 | Medium (Popular)
 ```
