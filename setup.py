@@ -6,10 +6,11 @@ setup(
     author_email='N/A',
     url='https://github.com/xcapri/turut',
     name='Turut',                            
-    version='0.1',                           
+    version='0.2',                           
     py_modules=['turut'],                   
     install_requires=[                      
-        'tldextract',                       
+        'tldextract',
+        'tranco',                       
     ],
     entry_points={                           
         'console_scripts': [
