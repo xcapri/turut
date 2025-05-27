@@ -42,8 +42,8 @@ def main():
     )
     parser.add_argument("-ld", "--listdomain", type=str, help="File containing the list of domains", required=False)
     parser.add_argument("-r", "--rank", action="store_true", help="Check domain rank using Tranco list")
-    parser.add_argument("-s", "--score", choices=['all', 'none', 'low', 'medium', 'high'], 
-                      help="Filter domains by rank score", default='all')
+    parser.add_argument("-s", "--score", type=str,
+                      help="Filter domains by rank score (comma-separated: all,none,low,medium,high)", default='all')
     parser.add_argument("-o", "--output", type=str, help="Save output to a file")
     
     if len(sys.argv) == 1 and sys.stdin.isatty():
@@ -84,6 +84,14 @@ def main():
     
     seen_domains = set()
     
+    score_filters = [s.strip().lower() for s in args.score.split(',')]
+    valid_scores = {'all', 'none', 'low', 'medium', 'high'}
+    invalid_scores = set(score_filters) - valid_scores
+    if invalid_scores:
+        print(f"Invalid score filters: {', '.join(invalid_scores)}")
+        print(f"Valid options are: {', '.join(valid_scores)}")
+        return
+    
     for dom in listdom:
         root_domain = getRoot(dom)
         if root_domain and root_domain not in seen_domains:
@@ -93,14 +101,18 @@ def main():
                 score = get_rank_score(rank)
                 
                 if rank != "-1":
-                    if args.score != 'all':
-                        if args.score == 'high' and 'High' not in score:
-                            continue
-                        elif args.score == 'medium' and 'Medium' not in score:
-                            continue
-                        elif args.score == 'low' and 'Low' not in score:
-                            continue
-                        elif args.score == 'none' and 'No Rank' not in score:
+                    if 'all' not in score_filters:
+                        score_match = False
+                        if 'high' in score_filters and 'High' in score:
+                            score_match = True
+                        elif 'medium' in score_filters and 'Medium' in score:
+                            score_match = True
+                        elif 'low' in score_filters and 'Low' in score:
+                            score_match = True
+                        elif 'none' in score_filters and 'No Rank' in score:
+                            score_match = True
+                            
+                        if not score_match:
                             continue
                     
                     output = f"https://{root_domain} | {rank} | {current_date} | {score}"
