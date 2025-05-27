@@ -46,4 +46,8 @@ turut -ld test
 redacted.com
 redacted.com
 
+or 
+turut -r -s high,medium
+https://amazonaws.com | 6 | 2025-05-27 | High (Very Popular)
+https://amagi.tv | 1234 | 2025-05-27 | Medium (Popular)
 ```
