@@ -1,8 +1,9 @@
 import tldextract
 import argparse
 import sys
+import tempfile
 from tranco import Tranco
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 def get_rank_score(rank):
     try:
@@ -62,7 +63,18 @@ def main():
             return
     
     if args.rank:
-        t = Tranco().list()
+        days_ago = 0
+        tr = Tranco(cache_dir=tempfile.gettempdir())
+        while True:
+            days_ago += 1
+            tranco_date = (datetime.now() - timedelta(days=days_ago)).strftime('%Y-%m-%d')
+            try:
+                t = tr.list(date=tranco_date)
+                break
+            except AttributeError as ex:
+                if not str(ex).startswith("The daily list for this date is currently unavailable"):
+                    raise ex
+
     
     if args.listdomain:
         try:
